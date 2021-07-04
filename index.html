@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/e46b5f4f4b.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container-fluid mt-5">
+        <div class="row mt-3 mb-3" >
+           
+            <div class="card "style="height=600px">
+                <div class="card-body bg-light">
+                    <div class="col-12 text-center">
+                        <label for="">CityName:</label>
+                        <input type="text" placeholder="Enter Your City" id="country">
+                        <div class="col-12 mt-3">
+                            <button onclick="fetchdetais()" class="btn btn-info border" > <i class="fa fa-search ml-2" ></i> Search</button>
+                            <button onclick="resetSearch()"class="btn btn-default ml-2 border"> <i class="fa fa-times ml-2" aria-hidden="true"></i> Reset</button>
+                            
+                        </div>
+                            
+                        
+                        </div>
+    
+                    </div>
+                </div>
+                </div>
+              </div>
+            
+            
+        </div>
+        <div class="row  " id="details"> 
+            
+        </div>
+    </div>
+</body>
+<script>
+    function display(city)
+    {
+    
+        //let nam=weather[0].name
+        let des=city.weather[0].description
+        let temp=city.main.temp
+        let press=city.main.pressure
+        let humidity=city.main.humidity
+        let win=city.wind.speed
+        let place=city.name
+        let temp_max=city.main.temp_max
+        let temp_min=city.main.temp_min
+        let sea_level=city.main.sea_level
+        let grnd_level=city.main.grnd_level
+        let winspeed=city.wind.speed
+        let windeg=city.wind.deg
+       
+        var iconcode = city.weather[0].icon;
+        var iconurl = "http://openweathermap.org/img/w/" + iconcode + ".png";
+        
+        
+       
+        console.log(des,temp,press,humidity,place,win)
+//         console.log(name,capita,currency_name,currency_symbol,flags,populatio)
+        let html_data=`<div class="row mt-3 mb-3">
+            <div class="card "style="height=600px">
+                <div class="card-body bg-light">
+
+                    <div class="row">
+                        <div class="col-md-4 col-lg-4 col-sm-6 ml-2 mt-4 text-left">
+                            <img src="${iconurl}" class="" width='150' height='150' id="wicon">
+                            <labe l class="text-center text-capitalize" style="font-size:25px;">  <b>${des} </b></label>
+                        </div>
+                         
+                        <div class="col-md-4 col-lg-4 col-sm-6 ml-2 mt-4 text-center">
+                            <labe l class="text-center text-capitalize" style="font-size:60px;">  <b>${temp} </b><span style="font-size:40px;"> &#8451; | F </span></label>
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-sm-6 ml-2 mt-4 text-right">
+                            <label class="text-center text-capitalize" style="font-size:20px;">  Humidity : <b>${humidity} </b></label>
+                            <br>
+                            <label class="text-center text-capitalize" style="font-size:20px;">  Pressure : <b>${press} </b></label>
+                        </div>     
+                        <div class="row  mb-3">
+                                    <div class="col-md-3 col-lg-3 col-sm-6 ml-2 mt-4 ">
+                                        <label class="text-center text-capitalize" >Minimum Temparature :  <b>${temp_min} &#8451;</b></label>
+                                        <label class="text-center text-capitalize" >Maximum Temparature :  <b>${temp_max} &#8451;</b></label>
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 col-sm-6 ml-2 mt-4 ">
+                                        <label class="text-center text-capitalize">  Sea Level : <b>${sea_level} </b></label>
+                                    
+                                        
+                                        
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 col-sm-6 ml-2 mt-4 ">
+                                        
+                                        <label class="text-center text-capitalize">  Ground Level : <b>${grnd_level} </b></label>
+                                        
+                                        
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 col-sm-6 ml-2 mt-4">
+                                        
+                                        <label class="text-center text-capitalize" > Wint Speed :  <b>${winspeed} </b></label></br>
+                                        <label class="text-center text-capitalize">  Wint Direction  : <b>${windeg} </b></label>
+                                    </div>
+                            
+                                </div>
+                            </div>
+                            </div>
+        
+                    </div>
+                    </div>
+                </div>
+              </div>`
+ document.querySelector("#details").innerHTML=html_data
+
+    }
+
+
+
+    function fetchdetais(){
+       // alert("haii")
+       let city_name = country.value
+       let api_key="4bfa2eba5e91c30423a6236ae51dd6ff"
+       let url=`https://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${api_key}&units=metric `
+        let request=new XMLHttpRequest()
+        request.open("get",url)
+        request.send()
+        request.onreadystatechange=()=>{
+            if(request.readyState==4)
+            {
+                if(request.status>199 & request.status<300)
+                {
+                    let data=JSON.parse(request.responseText)
+                    console.log(data)  
+                    display(data)              
+                }
+
+                
+            }
+
+        }
+    }
+
+        // function fetchCountry(){
+        //     let city_name=result.value;
+        //     let api_key="4bfa2eba5e91c30423a6236ae51dd6ff"
+        //     let url=`https://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${api_key}&units=metric `
+        //     fetch(url).then(res=>{
+        //         if(!(res.ok)){
+        //             throw new Error("failed to  fetch data")
+        //         }
+        //         else{
+        //             return res.json()
+        //         }
+        //         res.json()}).then(data=>displayCity(data)).catch(error=>alert(Error.message))
+        // }
+
+        function resetSearch(){
+            document.getElementById('country').value = ''
+            //document.querySelector("#country").innerHTML=''
+            document.querySelector("#details").innerHTML=''
+
+        }
+    
+
+</script>
+
+</html>
